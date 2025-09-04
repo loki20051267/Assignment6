@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laptop Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f8f9fa;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .builder, .output {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    select, input[type="checkbox"] {
+      margin-top: 5px;
+      padding: 6px;
+      width: 100%;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    pre {
+      background: #eee;
+      padding: 15px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💻 Laptop Builder</h1>
+  
+  <div class="builder">
+    <label>Choose CPU:</label>
+    <select id="cpu">
+      <option>Intel Core i3</option>
+      <option>Intel Core i5</option>
+      <option>Intel Core i7</option>
+      <option>AMD Ryzen 5</option>
+      <option>AMD Ryzen 7</option>
+    </select>
+
+    <label>Choose RAM:</label>
+    <select id="ram">
+      <option>8GB</option>
+      <option>16GB</option>
+      <option>32GB</option>
+    </select>
+
+    <label>Choose Storage:</label>
+    <select id="storage">
+      <option>256GB SSD</option>
+      <option>512GB SSD</option>
+      <option>1TB SSD</option>
+    </select>
+
+    <label>
+      <input type="checkbox" id="gpu"> Add Dedicated Graphics (NVIDIA RTX 3060)
+    </label>
+
+    <label>
+      <input type="checkbox" id="warranty"> Add Extended Warranty (3 Years)
+    </label>
+
+    <button onclick="buildLaptop()">Build Laptop</button>
+  </div>
+
+  <div class="output">
+    <h2>Your Laptop Configuration:</h2>
+    <pre id="result">No laptop built yet...</pre>
+  </div>
+
+  <script>
+    // Laptop class
+    class Laptop {
+      constructor() {
+        this.cpu = null;
+        this.ram = null;
+        this.storage = null;
+        this.graphics_card = "Integrated Graphics";
+        this.warranty = "1 Year Standard";
+      }
+      toString() {
+        return `--- Laptop Configuration ---
+CPU: ${this.cpu}
+RAM: ${this.ram}
+Storage: ${this.storage}
+Graphics Card: ${this.graphics_card}
+Warranty: ${this.warranty}`;
+      }
+    }
+
+    // Builder class
+    class LaptopBuilder {
+      constructor() {
+        this.laptop = new Laptop();
+      }
+      setCPU(cpu) {
+        this.laptop.cpu = cpu;
+        return this;
+      }
+      setRAM(ram) {
+        this.laptop.ram = ram;
+        return this;
+      }
+      setStorage(storage) {
+        this.laptop.storage = storage;
+        return this;
+      }
+      addGraphicsCard(gpu) {
+        if (gpu) this.laptop.graphics_card = "NVIDIA RTX 3060";
+        return this;
+      }
+      addExtendedWarranty(w) {
+        if (w) this.laptop.warranty = "3 Years Extended";
+        return this;
+      }
+      build() {
+        return this.laptop;
+      }
+    }
+
+    function buildLaptop() {
+      const cpu = document.getElementById("cpu").value;
+      const ram = document.getElementById("ram").value;
+      const storage = document.getElementById("storage").value;
+      const gpu = document.getElementById("gpu").checked;
+      const warranty = document.getElementById("warranty").checked;
+
+      const builder = new LaptopBuilder();
+      const laptop = builder
+        .setCPU(cpu)
+        .setRAM(ram)
+        .setStorage(storage)
+        .addGraphicsCard(gpu)
+        .addExtendedWarranty(warranty)
+        .build();
+
+      document.getElementById("result").textContent = laptop.toString();
+    }
+  </script>
+
+</body>
+</html>
